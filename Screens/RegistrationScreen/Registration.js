@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import * as ImagePicker from 'expo-image-picker';
 import {
-  StyleSheet,
   Text,
   View,
   TextInput,
@@ -11,11 +11,13 @@ import {
   Keyboard,
   Image,
 } from "react-native";
+import styles from "../Style/style";
 
 const Registration = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [image, setImage] = useState(null);
 
   const nameHandler = (text) => setName(text);
   const emailHandler = (text) => setEmail(text);
@@ -28,18 +30,37 @@ const Registration = () => {
     setPassword("");
   };
 
+  const onAddAvatar = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+    console.log(result);
+
+    if (result.canceled) {
+      return;
+    }
+    setImage(result.assets[0].uri);
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
+      <View style={styles.containerRegister}>
         <View style={styles.containerForAvatar}>
-          <Image
-            source={{ uri: "https://reactjs.org/logo-og.png" }}
-            style={{ ...styles.imageAvatar, width: 120, height: 120 }}
-          />
-          <Image
-            source={require("../../images/add-min.png")}
-            style={{ ...styles.imageAdd, width: 25, height: 25 }}
-          />
+          {!image ? (
+            <Pressable onPress={onAddAvatar}>
+              <Image
+                source={require("../../images/add-min.png")}
+                style={{ ...styles.imageAdd, width: 25, height: 25 }}
+              />
+            </Pressable>
+          ) : (
+            <Image
+              source={{ uri: `${image}` }}
+              style={{ width: 120, height: 120 }}
+            />
+          )}
         </View>
         <Text style={styles.title}>Registration</Text>
         <KeyboardAvoidingView
@@ -69,67 +90,10 @@ const Registration = () => {
             <Text style={styles.nameButton}>Sign up</Text>
           </Pressable>
         </KeyboardAvoidingView>
+        <Text style={styles.link}>If you are registered. Log in!</Text>
       </View>
     </TouchableWithoutFeedback>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 90,
-    paddingBottom: 45,
-    paddingHorizontal: 16,
-    backgroundColor: "#ffffff",
-    borderRadius: 30,
-    marginTop: "auto",
-  },
-  title: {
-    fontFamily: "Roboto",
-    fontWeight: 500,
-    fontSize: 30,
-    lineHeight: 35,
-    textAlign: "center",
-    letterSpacing: 0.01,
-    marginBottom: 30,
-    color: "#212121",
-  },
-  input: {
-    height: 50,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: "black",
-    marginBottom: 15,
-    borderRadius: 10,
-  },
-  buttonMy: {
-    height: 50,
-    padding: 16,
-    borderRadius: 100,
-    backgroundColor: "#ff6c00",
-  },
-  nameButton: {
-    fontFamily: "Roboto",
-    textAlign: "center",
-    letterSpacing: 0.01,
-    lineHeight: 15,
-    color: "#212121",
-  },
-  imageAvatar: {
-    backgroundColor: "#F6F6F6",
-    marginLeft: "auto",
-    marginRight: "auto",
-    borderRadius: 15,
-  },
-  imageAdd: {
-    position: "absolute",
-    bottom: 14,
-    right: 115,
-  },
-  containerForAvatar: {
-    marginBottom: 30,
-    marginTop: -150,
-    position: "relative",
-  },
-});
 
 export default Registration;
