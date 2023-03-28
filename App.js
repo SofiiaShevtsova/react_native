@@ -27,7 +27,7 @@ export default App = () => {
   return (
     <>
       {!isReady ? (
-        <View />
+        <View style={styles.container}/>
       ) : (
         <View style={styles.container}>
           <ImageBackground
