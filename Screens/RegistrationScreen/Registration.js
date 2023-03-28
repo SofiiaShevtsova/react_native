@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
 import {
   Text,
   View,
@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import styles from "../Style/style";
 
-const Registration = () => {
+const Registration = ({ onClicked }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -90,7 +90,9 @@ const Registration = () => {
             <Text style={styles.nameButton}>Sign up</Text>
           </Pressable>
         </KeyboardAvoidingView>
-        <Text style={styles.link}>If you are registered. Log in!</Text>
+        <Pressable onPress={onClicked}>
+          <Text style={styles.link}>If you are registered. Log in!</Text>
+        </Pressable>
       </View>
     </TouchableWithoutFeedback>
   );

@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native";
 
-
 const styles = StyleSheet.create({
   containerLogin: {
     paddingTop: 30,
@@ -19,7 +18,7 @@ const styles = StyleSheet.create({
     marginTop: "auto",
   },
   title: {
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-Medium",
     fontWeight: 500,
     fontSize: 30,
     lineHeight: 35,
@@ -44,7 +43,7 @@ const styles = StyleSheet.create({
     marginBottom:15,
   },
   nameButton: {
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-Regular",
     textAlign: "center",
     letterSpacing: 0.01,
     lineHeight: 15,
@@ -68,7 +67,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
     link: {
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-Regular",
     fontSize: 16,
     lineHeight: 19,
     textAlign: "center",
@@ -77,5 +76,6 @@ const styles = StyleSheet.create({
     color: "#1B4371",
   }
 });
+
 
 export default styles

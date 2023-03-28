@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import styles from "../Style/style";
 
-const Login = () => {
+const Login = ({ onClicked }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -49,7 +49,11 @@ const Login = () => {
             <Text style={styles.nameButton}>Sign in</Text>
           </Pressable>
         </KeyboardAvoidingView>
-        <Text style={styles.link}>If you are not registered. Sign up!</Text>
+        <Pressable onPress={onClicked}>
+          <Text style={styles.link} onClick={onClicked}>
+            If you are not registered. Sign up!
+          </Text>
+        </Pressable>
       </View>
     </TouchableWithoutFeedback>
   );
