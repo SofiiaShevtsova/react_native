@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     borderRadius: 30,
     marginTop: "auto",
-    },
+  },
   containerRegister: {
     paddingTop: 90,
     paddingBottom: 45,
@@ -16,6 +16,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     borderRadius: 30,
     marginTop: "auto",
+  },
+  containerPassword: {
+    position: "relative",
   },
   title: {
     fontFamily: "Roboto-Medium",
@@ -35,12 +38,21 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     borderRadius: 10,
   },
+  passwordShow: {
+    position: "absolute",
+    bottom: 30,
+    right: 50,
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    lineHeight: 19,
+    color: "#1B4371",
+  },
   buttonMy: {
     height: 50,
     padding: 16,
     borderRadius: 100,
     backgroundColor: "#ff6c00",
-    marginBottom:15,
+    marginBottom: 15,
   },
   nameButton: {
     fontFamily: "Roboto-Regular",
@@ -48,11 +60,11 @@ const styles = StyleSheet.create({
     letterSpacing: 0.01,
     lineHeight: 15,
     color: "#212121",
-    },
-    imageAvatar: {},
+  },
+  imageAvatar: {},
   imageAdd: {
     position: "absolute",
-    bottom: -100,
+    bottom: 20,
     right: -13,
   },
   containerForAvatar: {
@@ -66,7 +78,7 @@ const styles = StyleSheet.create({
     marginRight: "auto",
     borderRadius: 15,
   },
-    link: {
+  link: {
     fontFamily: "Roboto-Regular",
     fontSize: 16,
     lineHeight: 19,
@@ -74,8 +86,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.01,
     marginBottom: 30,
     color: "#1B4371",
-  }
+  },
 });
 
-
-export default styles
+export default styles;

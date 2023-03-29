@@ -14,6 +14,7 @@ import styles from "../Style/style";
 const Login = ({ onClicked }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPass, setShowPass] = useState(true);
 
   const emailHandler = (text) => setEmail(text);
   const passwordHandler = (text) => setPassword(text);
@@ -23,6 +24,7 @@ const Login = ({ onClicked }) => {
     setEmail("");
     setPassword("");
   };
+  const showPassword = () => setShowPass(!showPass);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -33,22 +35,28 @@ const Login = ({ onClicked }) => {
         >
           <TextInput
             placeholder="Email"
+            placeholderTextColor="#BDBDBD"
             style={styles.input}
             value={email}
             onChangeText={emailHandler}
           />
-          <TextInput
-            placeholder="Password"
-            style={styles.input}
-            value={password}
-            secureTextEntry={true}
-            onChangeText={passwordHandler}
-          />
-
-          <Pressable style={styles.buttonMy} onPress={SignIn}>
-            <Text style={styles.nameButton}>Sign in</Text>
-          </Pressable>
+          <View style={styles.containerPassword}>
+            <TextInput
+              placeholder="Password"
+              placeholderTextColor="#BDBDBD"
+              style={styles.input}
+              value={password}
+              secureTextEntry={showPass}
+              onChangeText={passwordHandler}
+            />
+            <Pressable style={styles.passwordShow} onPress={showPassword}>
+              <Text style={styles.nameButton}>Show</Text>
+            </Pressable>
+          </View>
         </KeyboardAvoidingView>
+        <Pressable style={styles.buttonMy} onPress={SignIn}>
+          <Text style={styles.nameButton}>Sign in</Text>
+        </Pressable>
         <Pressable onPress={onClicked}>
           <Text style={styles.link} onClick={onClicked}>
             If you are not registered. Sign up!

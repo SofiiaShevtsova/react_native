@@ -18,6 +18,7 @@ const Registration = ({ onClicked }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [image, setImage] = useState(null);
+  const [showPass, setShowPass] = useState(true);
 
   const nameHandler = (text) => setName(text);
   const emailHandler = (text) => setEmail(text);
@@ -43,53 +44,63 @@ const Registration = ({ onClicked }) => {
     }
     setImage(result.assets[0].uri);
   };
+  const showPassword = () => setShowPass(!showPass);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.containerRegister}>
-        <View style={styles.containerForAvatar}>
-          {!image ? (
-            <Pressable onPress={onAddAvatar}>
+        {!image ? (
+          <Pressable onPress={onAddAvatar}>
+            <View style={styles.containerForAvatar}>
               <Image
                 source={require("../../images/add-min.png")}
                 style={{ ...styles.imageAdd, width: 25, height: 25 }}
               />
-            </Pressable>
-          ) : (
+            </View>
+          </Pressable>
+        ) : (
+          <View style={styles.containerForAvatar}>
             <Image
               source={{ uri: `${image}` }}
               style={{ width: 120, height: 120 }}
             />
-          )}
-        </View>
+          </View>
+        )}
         <Text style={styles.title}>Registration</Text>
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
         >
           <TextInput
             placeholder="Username"
+            placeholderTextColor="#BDBDBD"
             style={styles.input}
             value={name}
             onChangeText={nameHandler}
           />
           <TextInput
             placeholder="Email"
+            placeholderTextColor="#BDBDBD"
             style={styles.input}
             value={email}
             onChangeText={emailHandler}
           />
-          <TextInput
-            placeholder="Password"
-            style={styles.input}
-            value={password}
-            secureTextEntry={true}
-            onChangeText={passwordHandler}
-          />
-
-          <Pressable style={styles.buttonMy} onPress={onSignUp}>
-            <Text style={styles.nameButton}>Sign up</Text>
-          </Pressable>
+          <View style={styles.containerPassword}>
+            <TextInput
+              placeholder="Password"
+              placeholderTextColor="#BDBDBD"
+              style={styles.input}
+              value={password}
+              secureTextEntry={showPass}
+              onChangeText={passwordHandler}
+            />
+            <Pressable style={styles.passwordShow} onPress={showPassword}>
+              <Text style={styles.nameButton}>Show</Text>
+            </Pressable>
+          </View>
         </KeyboardAvoidingView>
+        <Pressable style={styles.buttonMy} onPress={onSignUp}>
+          <Text style={styles.nameButton}>Sign up</Text>
+        </Pressable>
         <Pressable onPress={onClicked}>
           <Text style={styles.link}>If you are registered. Log in!</Text>
         </Pressable>
