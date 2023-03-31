@@ -17,7 +17,7 @@ const Stack = createNativeStackNavigator();
 
 export default App = () => {
   const [isReady, setIsReady] = useState(false);
-  const [user, setUser] = useState(true);
+  const [user, setUser] = useState(false);
 
   const loadFonts = async () => {
     await Font.loadAsync({
