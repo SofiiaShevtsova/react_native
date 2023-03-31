@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: "Roboto-Medium",
-    fontWeight: 500,
     fontSize: 30,
     lineHeight: 35,
     textAlign: "center",

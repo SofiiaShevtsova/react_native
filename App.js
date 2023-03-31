@@ -3,45 +3,50 @@ import { ImageBackground, StyleSheet, View } from "react-native";
 import Registration from "./Screens/RegistrationScreen/Registration";
 import Login from "./Screens/LoginScreen/Login";
 import * as Font from "expo-font";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Home from "./Screens/Home/Home";
 // import { AppLoading } from "expo";
 
+const Stack = createNativeStackNavigator();
 
 export default App = () => {
-  const [login, setLogin] = useState(true);
   const [isReady, setIsReady] = useState(false);
+  const [user, setUser] = useState(true);
 
   const loadFonts = async () => {
-  await Font.loadAsync({
-    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
-    "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
-  });
-  setIsReady(true)
-};
-
+    await Font.loadAsync({
+      "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+      "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+    });
+    setIsReady(true);
+  };
 
   useEffect(() => {
-    loadFonts()
+    loadFonts();
   }, []);
 
-  const onClick = () => setLogin(!login);
   return (
     <>
       {!isReady ? (
-        <View style={styles.container}/>
+        <View style={styles.container} />
       ) : (
-        <View style={styles.container}>
-          <ImageBackground
-            source={require("./images/BG-min.png")}
-            resizeMode="cover"
-            style={styles.image}
-          >
-            {login ? (
-              <Registration onClicked={onClick} />
-            ) : (
-              <Login onClicked={onClick} />
-            )}
-          </ImageBackground>
-        </View>
+        <NavigationContainer>
+          {user ? (
+            <Stack.Navigator initialRouteName="Publications">
+              <Stack.Screen name="Publications" component={Home} />
+              <Stack.Screen name="Login" component={Login} />
+            </Stack.Navigator>
+          ) : (
+            <Stack.Navigator
+              initialRouteName="Registration"
+              screenOptions={{ headerShown: false }}
+            >
+              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="Registration" component={Registration} />
+            </Stack.Navigator>
+          )}
+        </NavigationContainer>
       )}
     </>
   );
