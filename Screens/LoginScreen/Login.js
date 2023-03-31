@@ -12,7 +12,7 @@ import {
 import styles from "../Style/styleAuthPages";
 import ContainerAuth from "../../Components/ContainerAuth";
 
-const Login = ({ navigation, loginUser }) => {
+const Login = ({ navigation, user }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(true);
@@ -22,7 +22,7 @@ const Login = ({ navigation, loginUser }) => {
 
   const SignIn = () => {
     console.log("User", `${email}, ${password}`);
-    loginUser();
+    user(email)
     setEmail("");
     setPassword("");
   };

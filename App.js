@@ -5,6 +5,11 @@ import Login from "./Screens/LoginScreen/Login";
 import * as Font from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Posts from "./Screens/PostsScreen/PostScreen"
+import CreatePosts from "./Screens/CreatePostsScreen/CreatePosts";
+import Comments from "./Screens/CommentsScreen/CommentsScreen";
+import Profile from "./Screens/ProfileScreen/ProfileScreen";
+import Map from "./Screens/MapScreen/MapScreen";
 import Home from "./Screens/Home/Home";
 // import { AppLoading } from "expo";
 
@@ -21,10 +26,21 @@ export default App = () => {
     });
     setIsReady(true);
   };
-
+console.log(user);
   useEffect(() => {
     loadFonts();
   }, []);
+  const LoginScreen = () => {
+    return <Login user={ setUser} />
+  }
+
+    const RegisterScreen = () => {
+    return <Registration user={ setUser} />
+  }
+
+    const HomeScreen = () => {
+    return <Home user={ setUser} />
+  }
 
   return (
     <>
@@ -33,17 +49,17 @@ export default App = () => {
       ) : (
         <NavigationContainer>
           {user ? (
-            <Stack.Navigator initialRouteName="Publications">
-              <Stack.Screen name="Publications" component={Home} />
-              <Stack.Screen name="Login" component={Login} />
-            </Stack.Navigator>
+            <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Home" component={HomeScreen} />
+              </Stack.Navigator>
+              
           ) : (
             <Stack.Navigator
               initialRouteName="Registration"
               screenOptions={{ headerShown: false }}
             >
-              <Stack.Screen name="Login" component={Login} />
-              <Stack.Screen name="Registration" component={Registration} />
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="Registration" component={RegisterScreen} />
             </Stack.Navigator>
           )}
         </NavigationContainer>

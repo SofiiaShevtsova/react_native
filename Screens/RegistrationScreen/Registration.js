@@ -14,7 +14,7 @@ import {
 import styles from "../Style/styleAuthPages";
 import ContainerAuth from "../../Components/ContainerAuth";
 
-const Registration = ({ navigation, loginUser }) => {
+const Registration = ({ navigation, user }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,10 +27,10 @@ const Registration = ({ navigation, loginUser }) => {
 
   const onSignUp = () => {
     console.log("User", `${name}, ${email}, ${password}`);
-    loginUser();
     setName("");
     setEmail("");
     setPassword("");
+    user(email)
   };
 
   const onAddAvatar = async () => {

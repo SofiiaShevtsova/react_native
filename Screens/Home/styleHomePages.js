@@ -23,12 +23,12 @@ const styles = StyleSheet.create({
   containerNav: {
     display: "flex",
     position: "absolute",
-    bottom: 0,
+    bottom: 30,
     flexDirection: "row",
     gap: 30,
     justifyContent: "center",
     alignItems: "center",
-    width: "100vw",
+    width: "100%",
   },
 });
 

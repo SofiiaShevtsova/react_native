@@ -1,43 +1,70 @@
 import { Text, View, Pressable, Image } from "react-native";
-import styles from "../Style/styleHomePages";
+import styles from "./styleHomePages";
 import ContainerAll from "../../Components/ContainerAll";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import CreatePosts from "../CreatePostsScreen/CreatePosts";
+import Profile from "../ProfileScreen/ProfileScreen";
+import Posts from "../PostsScreen/PostScreen";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-const Home = () => {
+const Tab = createBottomTabNavigator();
+
+const Home = ({ user }) => {
+
   return (
-    <ContainerAll>
-      <View style={styles.userContainer}>
-        <View>
-          <Image
-            source={require("../../images/add-min.png")}
-            style={{ width: 60, height: 60 }}
-          />
-        </View>
-        <View>
-          <Text style={styles.userName}>User name</Text>
-          <Text style={styles.userEmail}>User email</Text>
-        </View>
-      </View>
-      <View style={styles.containerNav}>
-        <Pressable>
-          <Image
-            source={require("../../images/grid-min.png")}
-            style={{ width: 24, height: 24 }}
-          />
-        </Pressable>
-        <Pressable>
-          <Image
-            source={require("../../images/new-min.png")}
-            style={{ width: 70, height: 40 }}
-          />
-        </Pressable>
-        <Pressable>
-          <Image
-            source={require("../../images/user-min.png")}
-            style={{ width: 24, height: 24 }}
-          />
-        </Pressable>
-      </View>
-    </ContainerAll>
+    <>
+      <Tab.Navigator
+        initialRouteName="Publications"
+        screenOptions={{
+          tabBarActiveTintColor: "red",
+        }}
+      >
+        <Tab.Screen
+          name="Publications"
+          component={Posts}
+          tabBarShowLabel={false}
+          options={{
+            tabBarIcon: () => (
+              <Image
+                source={require("../../images/grid-min.png")}
+                style={{ width: 40, height: 40 }}
+              />
+            ),
+            headerRight: ({ navigation }) => (
+              <Pressable onPress={() => user(false)} style={{ paddingRight: 20 }}>
+                <Text>Log out</Text>
+              </Pressable>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Create posts"
+          component={CreatePosts}
+          tabBarShowLabel={false}
+          options={{
+            tabBarIcon: () => (
+              <Image
+                source={require("../../images/new-min.png")}
+                style={{ width: 70, height: 40 }}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={Profile}
+          tabBarShowLabel={false}
+          options={{
+            tabBarIcon: () => (
+              <Image
+                source={require("../../images/user-min.png")}
+                style={{ width: 40, height: 40 }}
+              />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    </>
   );
 };
 
