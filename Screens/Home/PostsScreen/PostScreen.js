@@ -1,4 +1,4 @@
-import ContainerAll from "../../Components/ContainerAll";
+import ContainerAll from "../../../Components/ContainerAll";
 // import React, { useState } from "react";
 import {
   Text,
@@ -11,7 +11,7 @@ import {
   Keyboard,
   Image,
 } from "react-native";
-import styles from "../Home/styleHomePages";
+import styles from "../styleHomePages";
 
 
 const Posts = () => {
@@ -21,7 +21,7 @@ const Posts = () => {
             <View style={styles.userContainer}>
         <View>
           <Image
-            source={require("../../images/add-min.png")}
+            source={require("../../../images/add-min.png")}
             style={{ width: 60, height: 60 }}
           />
         </View>

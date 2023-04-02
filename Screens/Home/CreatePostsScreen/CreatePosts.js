@@ -1,4 +1,4 @@
-import ContainerAll from "../../Components/ContainerAll";
+import ContainerAll from "../../../Components/ContainerAll";
 import React, { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import {
@@ -13,23 +13,25 @@ import {
   Image,
 } from "react-native";
 import styles from "./styleCreatePosts";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { Camera } from "expo-camera";
 
 const CreatePosts = () => {
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(null);
+  const [cameraRef, setCameraRef] = useState(null);
+  const [type, setType] = useState(Camera.Constants.Type.back);
   const [placeName, setPlaceName] = useState("");
   const [place, setPlace] = useState("");
 
   const onAddImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 1,
-    });
+    console.log(cameraRef);
 
-    if (result.canceled) {
-      return;
+    if (cameraRef) {
+      const photo = await cameraRef.takePictureAsync().then(async() => {
+        console.log(photo);
+        await MediaLibrary.createAssetAsync(photo.uri);
+      });
     }
-    setImage(result.assets[0].uri);
   };
 
   const onPublish = () => {
@@ -43,11 +45,11 @@ const CreatePosts = () => {
     <ContainerAll>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View>
-          {!image ? (
+          {/* {!image ? (
             <Pressable onPress={onAddImage}>
               <View>
                 <Image
-                  source={require("../../images/add-min.png")}
+                  source={require("../../../images/add-min.png")}
                   style={{ width: "100%", height: 240 }}
                 />
               </View>
@@ -59,7 +61,29 @@ const CreatePosts = () => {
                 style={{ width: "100%", height: 240 }}
               />
             </View>
-          )}
+          )} */}
+          <Camera style={styles.camera} ref={(ref) => setCameraRef(ref)} type={type}>
+            <Pressable style={styles.snapBtn} onPress={() => {
+              setType(
+                type === Camera.Constants.Type.back
+                  ? Camera.Constants.Type.front
+                  : Camera.Constants.Type.back
+              );
+            }}>
+              <MaterialCommunityIcons
+                name="sync"
+                color="rgba(33, 33, 33, 0.8)"
+                size={50}
+              />
+            </Pressable>
+                        <Pressable style={styles.snapBtn} onPress={onAddImage}>
+              <MaterialCommunityIcons
+                name="camera"
+                color="rgba(33, 33, 33, 0.8)"
+                size={50}
+              />
+            </Pressable>
+          </Camera>
           <Text style={styles.imageText}>Add image</Text>
           <KeyboardAvoidingView
             behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -89,9 +113,10 @@ const CreatePosts = () => {
         </View>
       </TouchableWithoutFeedback>
       <Pressable style={styles.deleteBtn}>
-        <Image
-          source={require("../../images/grid-min.png")}
-          style={{ width: 40, height: 40 }}
+        <MaterialCommunityIcons
+          name="cup"
+          color="rgba(33, 33, 33, 0.8)"
+          size={30}
         />
       </Pressable>
     </ContainerAll>

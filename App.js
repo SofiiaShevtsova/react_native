@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { ImageBackground, StyleSheet, View } from "react-native";
-import Registration from "./Screens/RegistrationScreen/Registration";
-import Login from "./Screens/LoginScreen/Login";
+import Registration from "./Screens/Auth/RegistrationScreen/Registration";
+import Login from "./Screens/Auth/LoginScreen/Login";
 import * as Font from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Posts from "./Screens/PostsScreen/PostScreen"
-import CreatePosts from "./Screens/CreatePostsScreen/CreatePosts";
-import Comments from "./Screens/CommentsScreen/CommentsScreen";
-import Profile from "./Screens/ProfileScreen/ProfileScreen";
-import Map from "./Screens/MapScreen/MapScreen";
 import Home from "./Screens/Home/Home";
 // import { AppLoading } from "expo";
 
@@ -26,7 +21,7 @@ export default App = () => {
     });
     setIsReady(true);
   };
-console.log(user);
+
   useEffect(() => {
     loadFonts();
   }, []);
@@ -39,7 +34,7 @@ console.log(user);
   }
 
     const HomeScreen = () => {
-    return <Home user={ setUser} />
+    return <Home user={ setUser}/>
   }
 
   return (

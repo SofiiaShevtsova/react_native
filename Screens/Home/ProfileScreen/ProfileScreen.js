@@ -1,4 +1,4 @@
-import ContainerAll from "../../Components/ContainerAll";
+import ContainerAll from "../../../Components/ContainerAll";
 // import React, { useState } from "react";
 import {
   Text,

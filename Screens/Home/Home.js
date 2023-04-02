@@ -2,21 +2,35 @@ import { Text, View, Pressable, Image } from "react-native";
 import styles from "./styleHomePages";
 import ContainerAll from "../../Components/ContainerAll";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import CreatePosts from "../CreatePostsScreen/CreatePosts";
-import Profile from "../ProfileScreen/ProfileScreen";
-import Posts from "../PostsScreen/PostScreen";
+import CreatePosts from "./CreatePostsScreen/CreatePosts";
+import Profile from "./ProfileScreen/ProfileScreen";
+import Posts from "./PostsScreen/PostScreen";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const Tab = createBottomTabNavigator();
 
-const Home = ({ user }) => {
-
+const Home = ({ user, navigation }) => {
   return (
     <>
       <Tab.Navigator
         initialRouteName="Publications"
         screenOptions={{
-          tabBarActiveTintColor: "red",
+          tabBarHideOnKeyboard: true,
+          tabBarStyle: {
+            height: 60,
+            paddingHorizontal: 60,
+            paddingTop: 10,
+          },
+          tabBarShowLabel: false,
+          tabBarActiveBackgroundColor: "#FF6C00",
+          tabBarInactiveBackgroundColor: "transparent",
+          tabBarActiveTintColor: "#FFFFFF",
+          tabBarInactiveTintColor: "rgba(33, 33, 33, 0.8)",
+          tabBarItemStyle: {
+            height: 40,
+            width: 70,
+            borderRadius: 20,
+          },
         }}
       >
         <Tab.Screen
@@ -24,15 +38,19 @@ const Home = ({ user }) => {
           component={Posts}
           tabBarShowLabel={false}
           options={{
-            tabBarIcon: () => (
-              <Image
-                source={require("../../images/grid-min.png")}
-                style={{ width: 40, height: 40 }}
-              />
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="grid" color={color} size={30} />
             ),
-            headerRight: ({ navigation }) => (
-              <Pressable onPress={() => user(false)} style={{ paddingRight: 20 }}>
-                <Text>Log out</Text>
+            headerRight: () => (
+              <Pressable
+                onPress={() => user(false)}
+                style={{ paddingRight: 20 }}
+              >
+                <MaterialCommunityIcons
+                  name="login"
+                  color="rgba(33, 33, 33, 0.8)"
+                  size={30}
+                />
               </Pressable>
             ),
           }}
@@ -42,11 +60,23 @@ const Home = ({ user }) => {
           component={CreatePosts}
           tabBarShowLabel={false}
           options={{
-            tabBarIcon: () => (
-              <Image
-                source={require("../../images/new-min.png")}
-                style={{ width: 70, height: 40 }}
-              />
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="plus" color={color} size={30} />
+            ),
+            tabBarStyle: {
+              display: "none",
+            },
+            headerLeft: () => (
+              <Pressable
+                onPress={() => user(true)}
+                style={{ paddingRight: 20 }}
+              >
+                <MaterialCommunityIcons
+                  name="arrow-left"
+                  color="rgba(33, 33, 33, 0.8)"
+                  size={30}
+                />
+              </Pressable>
             ),
           }}
         />
@@ -55,11 +85,8 @@ const Home = ({ user }) => {
           component={Profile}
           tabBarShowLabel={false}
           options={{
-            tabBarIcon: () => (
-              <Image
-                source={require("../../images/user-min.png")}
-                style={{ width: 40, height: 40 }}
-              />
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="account" color={color} size={30} />
             ),
           }}
         />

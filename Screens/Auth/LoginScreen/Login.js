@@ -10,7 +10,7 @@ import {
   Keyboard,
 } from "react-native";
 import styles from "../Style/styleAuthPages";
-import ContainerAuth from "../../Components/ContainerAuth";
+import ContainerAuth from "../../../Components/ContainerAuth";
 
 const Login = ({ navigation, user }) => {
   const [email, setEmail] = useState("");

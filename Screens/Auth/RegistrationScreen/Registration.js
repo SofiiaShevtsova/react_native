@@ -12,7 +12,7 @@ import {
   Image,
 } from "react-native";
 import styles from "../Style/styleAuthPages";
-import ContainerAuth from "../../Components/ContainerAuth";
+import ContainerAuth from "../../../Components/ContainerAuth";
 
 const Registration = ({ navigation, user }) => {
   const [name, setName] = useState("");
@@ -56,7 +56,7 @@ const Registration = ({ navigation, user }) => {
             <Pressable onPress={onAddAvatar}>
               <View style={styles.containerForAvatar}>
                 <Image
-                  source={require("../../images/add-min.png")}
+                  source={require("../../../images/add-min.png")}
                   style={{ ...styles.imageAdd, width: 25, height: 25 }}
                 />
               </View>
