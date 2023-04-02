@@ -1,38 +1,23 @@
-import ContainerAll from "../../../Components/ContainerAll";
-// import React, { useState } from "react";
-import {
-  Text,
-  View,
-  TextInput,
-  Pressable,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Image,
-} from "react-native";
-import styles from "../styleHomePages";
+import React from "react";
+import { moduleName } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
+import Posts from "./PostsScreen/Posts";
+import Map from "./MapScreen/MapScreen";
+import Comments from './CommentsScreen/CommentsScreen'
 
+const NestedScreen = createStackNavigator();
 
-const Posts = () => {
-
+const PostsScreen = () => {
   return (
-    <ContainerAll>
-            <View style={styles.userContainer}>
-        <View>
-          <Image
-            source={require("../../../images/add-min.png")}
-            style={{ width: 60, height: 60 }}
-          />
-        </View>
-        <View>
-          <Text style={styles.userName}>User name</Text>
-          <Text style={styles.userEmail}>User email</Text>
-        </View>
-      </View>
-
-    </ContainerAll>
+    <NestedScreen.Navigator>
+      <NestedScreen.Screen
+        name="Posts"
+        component={Posts}
+      />
+      <NestedScreen.Screen name="Comments" component={Comments} />
+      <NestedScreen.Screen name="Map" component={Map} />
+    </NestedScreen.Navigator>
   );
 };
 
-export default Posts;
+export default PostsScreen;

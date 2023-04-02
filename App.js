@@ -12,7 +12,7 @@ const Stack = createNativeStackNavigator();
 
 export default App = () => {
   const [isReady, setIsReady] = useState(false);
-  const [user, setUser] = useState(false);
+  const [user, setUser] = useState(true);
 
   const loadFonts = async () => {
     await Font.loadAsync({
@@ -26,16 +26,12 @@ export default App = () => {
     loadFonts();
   }, []);
   const LoginScreen = () => {
-    return <Login user={ setUser} />
-  }
+    return <Login user={setUser} />;
+  };
 
-    const RegisterScreen = () => {
-    return <Registration user={ setUser} />
-  }
-
-    const HomeScreen = () => {
-    return <Home user={ setUser}/>
-  }
+  const RegisterScreen = () => {
+    return <Registration user={setUser} />;
+  };
 
   return (
     <>
@@ -44,10 +40,7 @@ export default App = () => {
       ) : (
         <NavigationContainer>
           {user ? (
-            <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="Home" component={HomeScreen} />
-              </Stack.Navigator>
-              
+            <Home user={setUser} />
           ) : (
             <Stack.Navigator
               initialRouteName="Registration"

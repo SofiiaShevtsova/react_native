@@ -4,14 +4,14 @@ import ContainerAll from "../../Components/ContainerAll";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CreatePosts from "./CreatePostsScreen/CreatePosts";
 import Profile from "./ProfileScreen/ProfileScreen";
-import Posts from "./PostsScreen/PostScreen";
+import PostScreen from "./PostsScreen/PostScreen";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import PostsScreen from "./PostsScreen/PostScreen";
 
 const Tab = createBottomTabNavigator();
 
 const Home = ({ user, navigation }) => {
   return (
-    <>
       <Tab.Navigator
         initialRouteName="Publications"
         screenOptions={{
@@ -35,7 +35,7 @@ const Home = ({ user, navigation }) => {
       >
         <Tab.Screen
           name="Publications"
-          component={Posts}
+          component={PostsScreen}
           tabBarShowLabel={false}
           options={{
             tabBarIcon: ({ color }) => (
@@ -91,7 +91,6 @@ const Home = ({ user, navigation }) => {
           }}
         />
       </Tab.Navigator>
-    </>
   );
 };
 

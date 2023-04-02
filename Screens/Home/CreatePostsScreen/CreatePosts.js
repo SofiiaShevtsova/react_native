@@ -14,46 +14,95 @@ import {
 } from "react-native";
 import styles from "./styleCreatePosts";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { Camera } from "expo-camera";
+import { Camera, CameraType } from "expo-camera";
+import * as Location from "expo-location";
 
-const CreatePosts = () => {
-  const [image, setImage] = useState(null);
+const CreatePosts = ({ navigation }) => {
+  const [image, setImage] = useState("");
   const [cameraRef, setCameraRef] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [type, setType] = useState(CameraType.back);
   const [placeName, setPlaceName] = useState("");
   const [place, setPlace] = useState("");
+  const [status, requestPermission] = Camera.useCameraPermissions();
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [statusLoc, requestPermissionLoc] = Location.useBackgroundPermissions();
 
   const onAddImage = async () => {
-    console.log(cameraRef);
-
     if (cameraRef) {
-      const photo = await cameraRef.takePictureAsync().then(async() => {
-        console.log(photo);
-        await MediaLibrary.createAssetAsync(photo.uri);
-      });
+      const photo = await cameraRef.takePictureAsync();
+      await MediaLibrary.createAssetAsync(photo.uri);
+      setImage(photo.uri);
     }
   };
 
   const onPublish = () => {
     console.log(`Place ${placeName} in ${place}`);
+    navigation.navigate("Publications", { image });
     setPlace("");
     setImage("");
     setPlaceName("");
   };
 
+  if (status === null) {
+    return <View />;
+  }
+  if (status === false) {
+    return <Text>No access to camera</Text>;
+  }
+
+  useEffect(() => {
+    (async () => {
+      if (statusLoc !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
+
+  if (errorMsg) {
+    setPlace(errorMsg);
+  } else if (location) {
+    setPlace(JSON.stringify(location));
+  }
+
   return (
     <ContainerAll>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View>
-          {/* {!image ? (
-            <Pressable onPress={onAddImage}>
-              <View>
-                <Image
-                  source={require("../../../images/add-min.png")}
-                  style={{ width: "100%", height: 240 }}
+          {!image ? (
+            <Camera
+              style={styles.camera}
+              ref={(ref) => setCameraRef(ref)}
+              type={type}
+            >
+              <Pressable
+                style={styles.snapBtn}
+                onPress={() => {
+                  setType((current) =>
+                    current === CameraType.back
+                      ? CameraType.front
+                      : CameraType.back
+                  );
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="sync"
+                  color="rgba(33, 33, 33, 0.8)"
+                  size={50}
                 />
-              </View>
-            </Pressable>
+              </Pressable>
+              <Pressable style={styles.snapBtn} onPress={onAddImage}>
+                <MaterialCommunityIcons
+                  name="camera"
+                  color="rgba(33, 33, 33, 0.8)"
+                  size={50}
+                />
+              </Pressable>
+            </Camera>
           ) : (
             <View>
               <Image
@@ -61,29 +110,7 @@ const CreatePosts = () => {
                 style={{ width: "100%", height: 240 }}
               />
             </View>
-          )} */}
-          <Camera style={styles.camera} ref={(ref) => setCameraRef(ref)} type={type}>
-            <Pressable style={styles.snapBtn} onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}>
-              <MaterialCommunityIcons
-                name="sync"
-                color="rgba(33, 33, 33, 0.8)"
-                size={50}
-              />
-            </Pressable>
-                        <Pressable style={styles.snapBtn} onPress={onAddImage}>
-              <MaterialCommunityIcons
-                name="camera"
-                color="rgba(33, 33, 33, 0.8)"
-                size={50}
-              />
-            </Pressable>
-          </Camera>
+          )}
           <Text style={styles.imageText}>Add image</Text>
           <KeyboardAvoidingView
             behavior={Platform.OS == "ios" ? "padding" : "height"}
