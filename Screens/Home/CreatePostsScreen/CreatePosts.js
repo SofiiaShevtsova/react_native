@@ -24,13 +24,12 @@ const CreatePosts = ({ navigation }) => {
   const [placeName, setPlaceName] = useState("");
   const [place, setPlace] = useState("");
   const [status, requestPermission] = useState(null);
+  const [statusCam, requestPermissionCam] = useState(null);
   const [mainLocation, setMainLocation] = useState({
     latitude: "",
     longitude: "",
   });
 
-
-  console.log(mainLocation);
   const onAddImage = async () => {
     let location = await Location.getCurrentPositionAsync({});
     const { latitude, longitude } = {
@@ -78,9 +77,10 @@ const CreatePosts = ({ navigation }) => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       await MediaLibrary.requestPermissionsAsync();
 
-      requestPermission(status === "granted");
+      requestPermissionCam(status === "granted");
     })();
   }, []);
+
     useEffect(() => {
 (async () => {
       

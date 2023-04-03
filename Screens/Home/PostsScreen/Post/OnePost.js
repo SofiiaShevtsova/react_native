@@ -3,7 +3,7 @@ import styles from "./stylePosts";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const OnePost = ({ postOne, navigation }) => {
-  const {post:{image, place, placeName, placeLocation}} = postOne
+  const {post:{image, place, placeName, mainLocation}} = postOne
   return (
         <View style={styles.post}>
           <View style={styles.postImage}>
@@ -22,7 +22,7 @@ const OnePost = ({ postOne, navigation }) => {
               />
               <Text style={styles.comment}>0</Text>
             </Pressable>
-            <Pressable style={styles.btnNav} onPress={() => navigation.navigate("Map")}>
+            <Pressable style={styles.btnNav} onPress={() => navigation.navigate("Map", mainLocation)}>
               <MaterialCommunityIcons
                 name="marker"
                 color="#BDBDBD"
