@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { ImageBackground, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Registration from "./Screens/Auth/RegistrationScreen/Registration";
 import Login from "./Screens/Auth/LoginScreen/Login";
 import * as Font from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./Screens/Home/Home";
-// import { AppLoading } from "expo";
+import Map from "./Screens/Home/PostsScreen/MapScreen/MapScreen";
+import Comments from "./Screens/Home/PostsScreen/CommentsScreen/CommentsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -40,7 +41,13 @@ export default App = () => {
       ) : (
         <NavigationContainer>
           {user ? (
-            <Home user={setUser} />
+            <Stack.Navigator
+              initialRouteName="Home"
+            >
+              <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
+              <Stack.Screen name="Map" component={Map} />
+              <Stack.Screen name="Comments" component={Comments} />
+            </Stack.Navigator>
           ) : (
             <Stack.Navigator
               initialRouteName="Registration"

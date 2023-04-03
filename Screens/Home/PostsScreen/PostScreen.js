@@ -1,23 +1,42 @@
-import React from "react";
-import { moduleName } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
-import Posts from "./PostsScreen/Posts";
-import Map from "./MapScreen/MapScreen";
-import Comments from './CommentsScreen/CommentsScreen'
+import ContainerAll from "../../../Components/ContainerAll";
+import { Text, View, FlatList, Image } from "react-native";
+import styles from "./Post/stylePosts";
+import { useEffect, useState } from "react";
+import OnePost from "./Post/OnePost";
 
-const NestedScreen = createStackNavigator();
+const Posts = ({ route, navigation }) => {
+  const [posts, setPosts] = useState([]);
 
-const PostsScreen = () => {
+  useEffect(() => {
+    if (route.params === undefined) {
+      return;
+    } else setPosts((prevState) => [...prevState, route.params]);
+  }, [route.params]);
   return (
-    <NestedScreen.Navigator>
-      <NestedScreen.Screen
-        name="Posts"
-        component={Posts}
-      />
-      <NestedScreen.Screen name="Comments" component={Comments} />
-      <NestedScreen.Screen name="Map" component={Map} />
-    </NestedScreen.Navigator>
+    <ContainerAll>
+      <View style={styles.userContainer}>
+        <View style={styles.userImage}>
+          <Image
+            source={require("../../../images/add-min.png")}
+            style={{ width: 60, height: 60 }}
+          />
+        </View>
+        <View>
+          <Text style={styles.userName}>User name</Text>
+          <Text style={styles.userEmail}>User email</Text>
+        </View>
+      </View>
+      {posts.length > 0 && (
+        <FlatList
+          data={posts}
+          keyExtractor={(item, ind) => ind.toString()}
+          renderItem={({ item }) => (
+            <OnePost postOne={item} navigation={navigation} />
+          )}
+        />
+      )}
+    </ContainerAll>
   );
 };
 
-export default PostsScreen;
+export default Posts;

@@ -1,6 +1,5 @@
 import ContainerAll from "../../../Components/ContainerAll";
-import React, { useState } from "react";
-import * as ImagePicker from "expo-image-picker";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -16,6 +15,7 @@ import styles from "./styleCreatePosts";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { Camera, CameraType } from "expo-camera";
 import * as Location from "expo-location";
+import * as MediaLibrary from "expo-media-library";
 
 const CreatePosts = ({ navigation }) => {
   const [image, setImage] = useState("");
@@ -23,12 +23,33 @@ const CreatePosts = ({ navigation }) => {
   const [type, setType] = useState(CameraType.back);
   const [placeName, setPlaceName] = useState("");
   const [place, setPlace] = useState("");
-  const [status, requestPermission] = Camera.useCameraPermissions();
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
-  const [statusLoc, requestPermissionLoc] = Location.useBackgroundPermissions();
+  const [status, requestPermission] = useState(null);
+  const [mainLocation, setMainLocation] = useState({
+    latitude: "",
+    longitude: "",
+  });
 
+
+  console.log(mainLocation);
   const onAddImage = async () => {
+    let location = await Location.getCurrentPositionAsync({});
+    const { latitude, longitude } = {
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    };
+
+    setMainLocation({ latitude, longitude });
+    const url = `http://api.geonames.org/findNearbyPlaceNameJSON?lat=${latitude}&lng=${longitude}&username=alenaushakova`;
+    try {
+      const response = await fetch(url);
+      const result = await response.json();
+
+      const position = `${result.geonames[0].name}, ${result.geonames[0].countryName}`;
+      setPlace(position);
+    } catch (error) {
+      console.error(error);
+    }
+
     if (cameraRef) {
       const photo = await cameraRef.takePictureAsync();
       await MediaLibrary.createAssetAsync(photo.uri);
@@ -36,85 +57,91 @@ const CreatePosts = ({ navigation }) => {
     }
   };
 
-  const onPublish = () => {
-    console.log(`Place ${placeName} in ${place}`);
-    navigation.navigate("Publications", { image });
+  const onPublish = async () => {
+    const post = { image, place, mainLocation, placeName };
+    navigation.navigate("Publications", { post });
     setPlace("");
     setImage("");
     setPlaceName("");
+    setMainLocation(null);
   };
 
-  if (status === null) {
-    return <View />;
-  }
-  if (status === false) {
-    return <Text>No access to camera</Text>;
-  }
+  const clearPost = () => {
+    setPlace("");
+    setImage("");
+    setPlaceName("");
+    setMainLocation(null);
+  };
 
   useEffect(() => {
     (async () => {
-      if (statusLoc !== "granted") {
-        setErrorMsg("Permission to access location was denied");
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      await MediaLibrary.requestPermissionsAsync();
+
+      requestPermission(status === "granted");
+    })();
+  }, []);
+    useEffect(() => {
+(async () => {
+      
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
         return;
       }
-
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      requestPermission(status === "granted");
     })();
   }, []);
 
-  if (errorMsg) {
-    setPlace(errorMsg);
-  } else if (location) {
-    setPlace(JSON.stringify(location));
-  }
 
   return (
     <ContainerAll>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View>
-          {!image ? (
-            <Camera
-              style={styles.camera}
-              ref={(ref) => setCameraRef(ref)}
-              type={type}
-            >
-              <Pressable
-                style={styles.snapBtn}
-                onPress={() => {
-                  setType((current) =>
-                    current === CameraType.back
-                      ? CameraType.front
-                      : CameraType.back
-                  );
-                }}
+        <KeyboardAvoidingView
+          behavior={Platform.OS == "ios" ? "padding" : "height"}
+        >
+          <View>
+            {!image ? (
+              <Camera
+                style={styles.camera}
+                ref={(ref) => setCameraRef(ref)}
+                type={type}
               >
-                <MaterialCommunityIcons
-                  name="sync"
-                  color="rgba(33, 33, 33, 0.8)"
-                  size={50}
+                <Pressable
+                  style={styles.snapBtn}
+                  onPress={() => {
+                    setType((current) =>
+                      current === CameraType.back
+                        ? CameraType.front
+                        : CameraType.back
+                    );
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="sync"
+                    color="rgba(33, 33, 33, 0.8)"
+                    size={50}
+                  />
+                </Pressable>
+                <Pressable style={styles.snapBtn} onPress={onAddImage}>
+                  <MaterialCommunityIcons
+                    name="camera"
+                    color="rgba(33, 33, 33, 0.8)"
+                    size={50}
+                  />
+                </Pressable>
+              </Camera>
+            ) : (
+              <View>
+                <Image
+                  source={{ uri: `${image}` }}
+                  style={{ width: "100%", height: 240 }}
                 />
-              </Pressable>
-              <Pressable style={styles.snapBtn} onPress={onAddImage}>
-                <MaterialCommunityIcons
-                  name="camera"
-                  color="rgba(33, 33, 33, 0.8)"
-                  size={50}
-                />
-              </Pressable>
-            </Camera>
-          ) : (
-            <View>
-              <Image
-                source={{ uri: `${image}` }}
-                style={{ width: "100%", height: 240 }}
-              />
-            </View>
-          )}
-          <Text style={styles.imageText}>Add image</Text>
-          <KeyboardAvoidingView
-            behavior={Platform.OS == "ios" ? "padding" : "height"}
-          >
+              </View>
+            )}
+            <Text style={styles.imageText}>
+              {!image ? "Add image" : "Update image"}
+            </Text>
             <TextInput
               placeholder="Place"
               placeholderTextColor="#BDBDBD"
@@ -133,19 +160,29 @@ const CreatePosts = ({ navigation }) => {
                 setPlace(text);
               }}
             />
-          </KeyboardAvoidingView>
-          <Pressable style={styles.publishBtn} onPress={onPublish}>
-            <Text>Publish</Text>
-          </Pressable>
-        </View>
+            <Pressable
+              style={image ? styles.publishBtn : styles.publishBtnDis}
+              onPress={onPublish}
+              disabled={!image ? true : false}
+            >
+              <Text
+                style={image ? styles.publishBtnText : styles.publishBtnTextDis}
+              >
+                Publish
+              </Text>
+            </Pressable>
+          </View>
+        </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
-      <Pressable style={styles.deleteBtn}>
-        <MaterialCommunityIcons
-          name="cup"
-          color="rgba(33, 33, 33, 0.8)"
-          size={30}
-        />
-      </Pressable>
+      {image && (
+        <Pressable style={styles.deleteBtn} onPress={clearPost}>
+          <MaterialCommunityIcons
+            name="cup"
+            color="rgba(33, 33, 33, 0.8)"
+            size={30}
+          />
+        </Pressable>
+      )}
     </ContainerAll>
   );
 };

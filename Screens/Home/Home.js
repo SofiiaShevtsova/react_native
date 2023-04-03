@@ -1,16 +1,13 @@
-import { Text, View, Pressable, Image } from "react-native";
-import styles from "./styleHomePages";
-import ContainerAll from "../../Components/ContainerAll";
+import { Pressable } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import CreatePosts from "./CreatePostsScreen/CreatePosts";
 import Profile from "./ProfileScreen/ProfileScreen";
-import PostScreen from "./PostsScreen/PostScreen";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import PostsScreen from "./PostsScreen/PostScreen";
 
 const Tab = createBottomTabNavigator();
 
-const Home = ({ user, navigation }) => {
+const Home = ({ user }) => {
   return (
       <Tab.Navigator
         initialRouteName="Publications"

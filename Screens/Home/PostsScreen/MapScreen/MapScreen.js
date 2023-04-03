@@ -1,26 +1,23 @@
-import ContainerAll from "../../Components/ContainerAll";
-// import React, { useState } from "react";
-import {
-  Text,
-  View,
-  TextInput,
-  Pressable,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Image,
-} from "react-native";
 import MapView, {Marker} from "react-native-maps";
+import { StyleSheet } from "react-native";
 
 const Map = () => {
   return (
-    <ContainerAll>
-      <MapView>
+      <MapView style={styles.mapContainer}>
         <Marker coordinate={{ latitude: 50.516339, longitude: 30.602185 } } title="travel photo"/>
       </MapView>
-    </ContainerAll>
   );
 };
+
+
+const styles = StyleSheet.create({
+  mapContainer: {
+    width: "100%",
+    height: '100%',
+    marginHorizontal:5,
+  },
+});
+
+
 
 export default Map;
