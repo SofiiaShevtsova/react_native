@@ -8,12 +8,45 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./Screens/Home/Home";
 import Map from "./Screens/Home/PostsScreen/MapScreen/MapScreen";
 import Comments from "./Screens/Home/PostsScreen/CommentsScreen/CommentsScreen";
+import { store, persistor } from "./redux/reduxStore";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { useSelector } from "react-redux";
+import { getEmail } from "./redux/authSelectors";
 
 const Stack = createNativeStackNavigator();
 
+const NavigationBox = () => {
+  const user = useSelector(getEmail);
+  console.log(user);
+
+  return (
+    <NavigationContainer>
+      {user ? (
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="Map" component={Map} />
+          <Stack.Screen name="Comments" component={Comments} />
+        </Stack.Navigator>
+      ) : (
+        <Stack.Navigator
+          initialRouteName="Registration"
+          screenOptions={{ headerShown: false }}
+        >
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Registration" component={Registration} />
+        </Stack.Navigator>
+      )}
+    </NavigationContainer>
+  );
+};
+
 export default App = () => {
   const [isReady, setIsReady] = useState(false);
-  const [user, setUser] = useState(true);
 
   const loadFonts = async () => {
     await Font.loadAsync({
@@ -26,39 +59,14 @@ export default App = () => {
   useEffect(() => {
     loadFonts();
   }, []);
-  const LoginScreen = () => {
-    return <Login user={setUser} />;
-  };
-
-  const RegisterScreen = () => {
-    return <Registration user={setUser} />;
-  };
 
   return (
     <>
-      {!isReady ? (
-        <View style={styles.container} />
-      ) : (
-        <NavigationContainer>
-          {user ? (
-            <Stack.Navigator
-              initialRouteName="Home"
-            >
-              <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
-              <Stack.Screen name="Map" component={Map} />
-              <Stack.Screen name="Comments" component={Comments} />
-            </Stack.Navigator>
-          ) : (
-            <Stack.Navigator
-              initialRouteName="Registration"
-              screenOptions={{ headerShown: false }}
-            >
-              <Stack.Screen name="Login" component={LoginScreen} />
-              <Stack.Screen name="Registration" component={RegisterScreen} />
-            </Stack.Navigator>
-          )}
-        </NavigationContainer>
-      )}
+      <Provider store={store}>
+        {/* <PersistGate loading={null} persistor={persistor}> */}
+        {!isReady ? <View style={styles.container} /> : <NavigationBox />}
+        {/* </PersistGate> */}
+      </Provider>
     </>
   );
 };

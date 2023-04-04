@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDispatch } from 'react-redux';
 import {
   Text,
   View,
@@ -9,24 +10,28 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import styles from "../Style/styleAuthPages";
+import { logInUser } from "../../../redux/authOperation";
 import ContainerAuth from "../../../Components/ContainerAuth";
+import styles from "../Style/styleAuthPages";
 
-const Login = ({ navigation, user }) => {
+const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(true);
 
+  const dispatch = useDispatch();
+  
   const emailHandler = (text) => setEmail(text);
   const passwordHandler = (text) => setPassword(text);
+  const showPassword = () => setShowPass(!showPass);
 
   const SignIn = () => {
-    console.log("User", `${email}, ${password}`);
-    user(email)
+    const user = {email, password}
+    dispatch(logInUser(user));
+
     setEmail("");
     setPassword("");
   };
-  const showPassword = () => setShowPass(!showPass);
 
   return (
     <ContainerAuth>

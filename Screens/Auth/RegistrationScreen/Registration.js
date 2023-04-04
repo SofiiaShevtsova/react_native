@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
+import { useDispatch } from "react-redux";
 import {
   Text,
   View,
@@ -11,26 +12,31 @@ import {
   Keyboard,
   Image,
 } from "react-native";
-import styles from "../Style/styleAuthPages";
+import { registerNewUser } from "../../../redux/authOperation";
 import ContainerAuth from "../../../Components/ContainerAuth";
+import styles from "../Style/styleAuthPages";
 
-const Registration = ({ navigation, user }) => {
+const Registration = ({ navigation }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [image, setImage] = useState(null);
   const [showPass, setShowPass] = useState(true);
 
+  const dispatch = useDispatch();
+
   const nameHandler = (text) => setName(text);
   const emailHandler = (text) => setEmail(text);
   const passwordHandler = (text) => setPassword(text);
+  const showPassword = () => setShowPass(!showPass);
 
   const onSignUp = () => {
-    console.log("User", `${name}, ${email}, ${password}`);
+    const user = { email, password };
+    dispatch(registerNewUser(user));
+
     setName("");
     setEmail("");
     setPassword("");
-    user(email)
   };
 
   const onAddAvatar = async () => {
@@ -39,14 +45,12 @@ const Registration = ({ navigation, user }) => {
       allowsEditing: true,
       quality: 1,
     });
-    console.log(result);
 
     if (result.canceled) {
       return;
     }
     setImage(result.assets[0].uri);
   };
-  const showPassword = () => setShowPass(!showPass);
 
   return (
     <ContainerAuth>
