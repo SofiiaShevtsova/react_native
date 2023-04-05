@@ -10,19 +10,20 @@ import {
   getName,
 } from "../../../redux/Auth/authSelectors";
 import { getAllPosts } from "../../../redux/Posts/postsOperation";
-import { getPosts } from "../../../redux/Posts/postsSelectors";
+import { getPosts, isChanged } from "../../../redux/Posts/postsSelectors";
 
 const Posts = ({ navigation }) => {
   const posts = useSelector(getPosts);
   const name = useSelector(getName);
   const avatar = useSelector(getAvatar);
   const email = useSelector(getEmail);
+  const changed = useSelector(isChanged)
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllPosts());
-  }, []);
+    if(changed){dispatch(getAllPosts());}
+  }, [changed]);
 
   return (
     <ContainerAll>

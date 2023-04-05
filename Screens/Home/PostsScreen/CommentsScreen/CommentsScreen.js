@@ -14,15 +14,24 @@ import {
 import styles from "../Post/stylePosts";
 import { useState } from "react";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { useDispatch, useSelector } from "react-redux";
+import { updatePost } from "../../../../redux/Posts/postsOperation";
+import { getAvatar } from "../../../../redux/Auth/authSelectors";
 
 const Comments = ({ route }) => {
-  const [commentsList, setCommentsList] = useState([]);
+  const [commentsList, setCommentsList] = useState(route.params.comments);
   const [comment, setComment] = useState("");
   const image = route.params.image;
+  const id = route.params.id;
+  const userAvatar = useSelector(getAvatar);
+
+  const dispatch = useDispatch();
 
   const onPublish = () => {
     const date = new Date().toDateString();
-    setCommentsList((prev) => [...prev, { comment, date }]);
+    const list = [...commentsList, { comment, date, userAvatar }]
+    setCommentsList(list);
+    dispatch(updatePost({ id, comments:list }));
     setComment("");
   };
   return (
@@ -41,6 +50,10 @@ const Comments = ({ route }) => {
           keyExtractor={(item, ind) => ind.toString()}
           renderItem={({ item }) => (
             <>
+              <Image
+                source={{ uri: `${item.userAvatar}` }}
+                style={{ width: 20, height: 20 }}
+              />
               <Text>{item.comment}</Text>
               <Text>{item.date}</Text>
             </>

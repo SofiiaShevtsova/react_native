@@ -11,7 +11,8 @@ const OnePost = ({ postOne, navigation }) => {
       comments,
       like,
       owner,
-      date
+    date,
+      id
     } = postOne
   return (
         <View style={styles.post}>
@@ -23,7 +24,7 @@ const OnePost = ({ postOne, navigation }) => {
           </View>
           <Text style={styles.postName}>{name || "Not Found"}</Text>
           <View style={styles.navBoxMapCom}>
-            <Pressable style={styles.btnNav} onPress={() => navigation.navigate("Comments", {image})}>
+            <Pressable style={styles.btnNav} onPress={() => navigation.navigate("Comments", {image, comments, id})}>
               <MaterialCommunityIcons
                 name="comment"
                 color="#BDBDBD"

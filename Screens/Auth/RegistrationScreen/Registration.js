@@ -64,7 +64,7 @@ const Registration = ({ navigation }) => {
       const metadata = {
         contentType: "image/*",
       };
-      const storageRef = ref(storage, "images/" + res._data.name);
+      const storageRef = ref(storage, "avatar/" + res._data.name);
       const uploadTask = uploadBytesResumable(storageRef, res, metadata);
       uploadTask.on(
         "upload",

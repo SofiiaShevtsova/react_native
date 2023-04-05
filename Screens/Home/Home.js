@@ -9,7 +9,7 @@ import PostsScreen from "./PostsScreen/PostScreen";
 
 const Tab = createBottomTabNavigator();
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const logoutUser = () => {
@@ -68,7 +68,7 @@ const Home = () => {
             display: "none",
           },
           headerLeft: () => (
-            <Pressable onPress={() => user(true)} style={{ paddingRight: 20 }}>
+            <Pressable onPress={()=>navigation.navigate("Publications")} style={{ paddingRight: 20 }}>
               <MaterialCommunityIcons
                 name="arrow-left"
                 color="rgba(33, 33, 33, 0.8)"
