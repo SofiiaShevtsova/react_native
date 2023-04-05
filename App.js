@@ -12,13 +12,20 @@ import { store, persistor } from "./redux/reduxStore";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { useSelector } from "react-redux";
-import { getEmail } from "./redux/authSelectors";
+import { getEmail, isUserLogin } from "./redux/authSelectors";
+import { useDispatch } from "react-redux";
+import { getCurrentUser } from "./redux/authOperation";
 
 const Stack = createNativeStackNavigator();
 
 const NavigationBox = () => {
+  const dispatch = useDispatch();
   const user = useSelector(getEmail);
-  console.log(user);
+  const isLogin = useSelector(isUserLogin);
+
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [isLogin]);
 
   return (
     <NavigationContainer>

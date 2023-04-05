@@ -8,5 +8,5 @@ export const getEmail = state => state.auth.userEmail;
 // export const getToken = state => state.auth.accessToken;
 
 //  --------------- ADDITIONAL ------------
-// export const getIsLoggedIn = state => state.auth.isLoggedIn;
+export const isUserLogin = state => state.auth.isLogin;
 // export const getIsUserFetching = state => state.auth.isUserFetching;

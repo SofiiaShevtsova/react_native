@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  onAuthStateChanged,
 } from "firebase/auth";
 import { auth } from "../firebase/config";
 
@@ -17,7 +18,7 @@ export const registerNewUser = createAsyncThunk(
         password
       );
       if (newUser) {
-        return newUser;
+        return newUser.user.email;
       }
     } catch (e) {
       return thunkAPI.rejectWithValue("Not register!");
@@ -31,9 +32,8 @@ export const logInUser = createAsyncThunk(
     try {
       const { email, password } = user;
       const userLogin = await signInWithEmailAndPassword(auth, email, password);
-      console.log(user);
       if (userLogin) {
-        return userLogin;
+        return userLogin.user.email;
       }
     } catch (e) {
       return thunkAPI.rejectWithValue("Not founded!");
@@ -42,34 +42,47 @@ export const logInUser = createAsyncThunk(
 );
 
 export const logOutUser = createAsyncThunk(
-  'login/outUser',
+  "login/outUser",
   async (_, thunkAPI) => {
     try {
-      await signOut(auth)
-      return null
+      await signOut(auth);
+      return null;
     } catch (e) {
-      return thunkAPI.rejectWithValue('Not founded!');
+      return thunkAPI.rejectWithValue("Not founded!");
     }
   }
 );
 
-// export const getCurrentUser = createAsyncThunk(
-//   'tokin/getUser',
-//   async (_, thunkAPI) => {
-//     const state = thunkAPI.getState();
-//     if (!state.phonebook.refreshToken) {
-//       return thunkAPI.rejectWithValue('Not founded!');
-//     }
-//     try {
-//       const { phonebook: { refreshToken } } = state
-//       const response = await axios.post('/users/refresh', { refreshToken});
-//       currentToken.set(response.data.accessToken);
-//       return response.data;
-//     } catch (e) {
-//       return thunkAPI.rejectWithValue('Not founded!');
-//     }
-//   }
-// );
+export const getCurrentUser = createAsyncThunk(
+  "user/getCurrentUser",
+  async (_, thunkAPI) => {
+    try {
+      const userProfile = await new Promise((resolve, reject) => {
+        const unsubscribe = onAuthStateChanged(
+          auth,
+          (userAuth) => {
+            unsubscribe();
+            resolve(userAuth);
+          },
+          reject
+        );
+      });
+      if (userProfile) {
+        const user = {
+          uid: userProfile.uid,
+          photo: userProfile.photoURL,
+          email: userProfile.email,
+          name: userProfile.displayName,
+        };
+        return user;
+      } else {
+        throw new Error
+      }
+    } catch (e) {
+      return thunkAPI.rejectWithValue("Not founded!");
+    }
+  }
+);
 
 // export const changeAvatar = createAsyncThunk(
 //   'avatars/change',
