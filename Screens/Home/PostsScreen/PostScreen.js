@@ -1,22 +1,29 @@
 import ContainerAll from "../../../Components/ContainerAll";
 import { Text, View, FlatList, Image } from "react-native";
 import styles from "./Post/stylePosts";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import OnePost from "./Post/OnePost";
 import { useSelector, useDispatch } from "react-redux";
-import { getEmail, getAvatar, getName } from "../../../redux/Auth/authSelectors";
+import {
+  getEmail,
+  getAvatar,
+  getName,
+} from "../../../redux/Auth/authSelectors";
+import { getAllPosts } from "../../../redux/Posts/postsOperation";
+import { getPosts } from "../../../redux/Posts/postsSelectors";
 
-const Posts = ({ route, navigation }) => {
-  const [posts, setPosts] = useState([]);
+const Posts = ({ navigation }) => {
+  const posts = useSelector(getPosts);
   const name = useSelector(getName);
   const avatar = useSelector(getAvatar);
   const email = useSelector(getEmail);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    if (route.params === undefined) {
-      return;
-    } else setPosts((prevState) => [...prevState, route.params]);
-  }, [route.params]);
+    dispatch(getAllPosts());
+  }, []);
+
   return (
     <ContainerAll>
       <View style={styles.userContainer}>

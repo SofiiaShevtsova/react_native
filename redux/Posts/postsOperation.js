@@ -1,40 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import {
-    
-} from "firebase/auth";
-import { auth } from "../../firebase/config";
-
-export const getAllPosts = createAsyncThunk(
-  "posts/getPosts",
-  async (user, thunkAPI) => {
-    try {
-      const { email, password, image = "", name } = user;
-      const newUser = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      if (newUser) {
-        updateProfile(auth.currentUser, {
-          displayName: name,
-          photoURL: image,
-        })
-        return email;
-      }
-    } catch (e) {
-      return thunkAPI.rejectWithValue("Not register!");
-    }
-  }
-);
+import { auth, db } from "../../firebase/config";
+import { collection, addDoc, getDocs } from "firebase/firestore";
 
 export const addPosts = createAsyncThunk(
   "posts/addPosts",
-  async (user, thunkAPI) => {
+  async (posts, thunkAPI) => {
     try {
-      const { email, password } = user;
-      const userLogin = await signInWithEmailAndPassword(auth, email, password);
-      if (userLogin) {
-        return userLogin.user.email;
+      const post = await addDoc(collection(db, "posts"), { ...posts });
+      if (post) {
+        return posts;
       }
     } catch (e) {
       return thunkAPI.rejectWithValue("Not founded!");
@@ -42,3 +16,19 @@ export const addPosts = createAsyncThunk(
   }
 );
 
+export const getAllPosts = createAsyncThunk(
+  "posts/getPosts",
+  async (_, thunkAPI) => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "posts"));
+      const posts = [];
+      querySnapshot.forEach((doc) => {
+        posts.push(doc.data());
+      });
+
+      return posts;
+    } catch (e) {
+      return thunkAPI.rejectWithValue("Not register!");
+    }
+  }
+);

@@ -3,7 +3,16 @@ import styles from "./stylePosts";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const OnePost = ({ postOne, navigation }) => {
-  const {post:{image, place, placeName, mainLocation}} = postOne
+  const {
+      image,
+      place,
+      location,
+      name,
+      comments,
+      like,
+      owner,
+      date
+    } = postOne
   return (
         <View style={styles.post}>
           <View style={styles.postImage}>
@@ -12,7 +21,7 @@ const OnePost = ({ postOne, navigation }) => {
               style={{ width: "100%", height: 240 }}
             />
           </View>
-          <Text style={styles.postName}>{placeName || "Not Found"}</Text>
+          <Text style={styles.postName}>{name || "Not Found"}</Text>
           <View style={styles.navBoxMapCom}>
             <Pressable style={styles.btnNav} onPress={() => navigation.navigate("Comments", {image})}>
               <MaterialCommunityIcons
@@ -20,9 +29,9 @@ const OnePost = ({ postOne, navigation }) => {
                 color="#BDBDBD"
                 size={24}
               />
-              <Text style={styles.comment}>0</Text>
+          <Text style={styles.comment}>{ `${comments.length}` }</Text>
             </Pressable>
-            <Pressable style={styles.btnNav} onPress={() => navigation.navigate("Map", mainLocation)}>
+            <Pressable style={styles.btnNav} onPress={() => navigation.navigate("Map", location)}>
               <MaterialCommunityIcons
                 name="marker"
                 color="#BDBDBD"

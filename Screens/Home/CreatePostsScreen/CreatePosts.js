@@ -1,5 +1,7 @@
 import ContainerAll from "../../../Components/ContainerAll";
 import React, { useState, useEffect } from "react";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../../../firebase/config";
 import {
   Text,
   View,
@@ -16,6 +18,9 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { Camera, CameraType } from "expo-camera";
 import * as Location from "expo-location";
 import * as MediaLibrary from "expo-media-library";
+import { addPosts } from "../../../redux/Posts/postsOperation";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserId } from "../../../redux/Auth/authSelectors";
 
 const CreatePosts = ({ navigation }) => {
   const [image, setImage] = useState("");
@@ -29,6 +34,9 @@ const CreatePosts = ({ navigation }) => {
     latitude: "",
     longitude: "",
   });
+
+  const dispatch = useDispatch();
+  const uid = useSelector(getUserId);
 
   const onAddImage = async () => {
     let location = await Location.getCurrentPositionAsync({});
@@ -45,20 +53,60 @@ const CreatePosts = ({ navigation }) => {
 
       const position = `${result.geonames[0].name}, ${result.geonames[0].countryName}`;
       setPlace(position);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
 
     if (cameraRef) {
       const photo = await cameraRef.takePictureAsync();
-      await MediaLibrary.createAssetAsync(photo.uri);
       setImage(photo.uri);
+      await MediaLibrary.createAssetAsync(photo.uri);
     }
   };
 
   const onPublish = async () => {
-    const post = { image, place, mainLocation, placeName };
-    navigation.navigate("Publications", { post });
+    const currentImage = new Promise((res, rej) => {
+      const xhr = new XMLHttpRequest();
+      xhr.responseType = "blob";
+      xhr.onload = (event) => {
+        res(xhr.response);
+      };
+      xhr.open("GET", image, true);
+      xhr.send();
+    }).then((res) => {
+      const metadata = {
+        contentType: "image/*",
+      };
+      const storageRef = ref(storage, "images/" + res._data.name);
+      const uploadTask = uploadBytesResumable(storageRef, res, metadata);
+      uploadTask.on(
+        "upload",
+        (snapshot) => {},
+        (error) => {},
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setImage(downloadURL);
+          });
+        }
+      );
+    });
+
+    const comment = [];
+    const like = 0;
+
+    const post = {
+      image: image,
+      place: place,
+      location: mainLocation,
+      name: placeName,
+      comments: comment,
+      like: like,
+      owner: uid,
+      date: new Date().toDateString(),
+    };
+
+    dispatch(addPosts(post));
+
+    navigation.navigate("Publications");
+
     setPlace("");
     setImage("");
     setPlaceName("");
@@ -81,18 +129,16 @@ const CreatePosts = ({ navigation }) => {
     })();
   }, []);
 
-    useEffect(() => {
-(async () => {
-      
+  useEffect(() => {
+    (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
         return;
       }
       requestPermission(status === "granted");
     })();
   }, []);
-
 
   return (
     <ContainerAll>

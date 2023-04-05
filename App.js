@@ -8,18 +8,17 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./Screens/Home/Home";
 import Map from "./Screens/Home/PostsScreen/MapScreen/MapScreen";
 import Comments from "./Screens/Home/PostsScreen/CommentsScreen/CommentsScreen";
-import { store, persistor } from "./redux/reduxStore";
+import { store } from "./redux/reduxStore";
 import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
 import { useSelector, useDispatch } from "react-redux";
-import { getEmail, isUserLogin } from "./redux/authSelectors";
-import { getCurrentUser } from "./redux/authOperation";
+import { getEmail, isUserLogin } from "./redux/Auth/authSelectors";
+import { getCurrentUser } from "./redux/Auth/authOperation";
 
 const Stack = createNativeStackNavigator();
 
 const NavigationBox = () => {
   const dispatch = useDispatch();
-  const user = useSelector(getEmail);
+  const userEmail = useSelector(getEmail);
   const isLogin = useSelector(isUserLogin);
 
   useEffect(() => {
@@ -28,7 +27,7 @@ const NavigationBox = () => {
 
   return (
     <NavigationContainer>
-      {user ? (
+      {userEmail ? (
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen
             name="Home"
@@ -69,9 +68,7 @@ export default App = () => {
   return (
     <>
       <Provider store={store}>
-        {/* <PersistGate loading={null} persistor={persistor}> */}
         {!isReady ? <View style={styles.container} /> : <NavigationBox />}
-        {/* </PersistGate> */}
       </Provider>
     </>
   );
