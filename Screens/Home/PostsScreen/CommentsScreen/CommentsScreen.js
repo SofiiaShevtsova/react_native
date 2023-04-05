@@ -12,11 +12,25 @@ import {
   Image,
 } from "react-native";
 import styles from "../Post/stylePosts";
+import stylesComment from "./styleComments";
 import { useState } from "react";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePost } from "../../../../redux/Posts/postsOperation";
 import { getAvatar } from "../../../../redux/Auth/authSelectors";
+
+const OneComment = ({item}) => {
+  return (
+    <View style={stylesComment.commentContainer}>
+        <Image
+          source={{ uri: `${item.userAvatar}` }}
+          style={{ ...stylesComment.userImage, width: 30, height: 30 }}
+        />
+      <Text style={stylesComment.commentText}>{item.comment}</Text>
+      <Text style={stylesComment.commentDate}>{item.date}</Text>
+    </View>
+  );
+};
 
 const Comments = ({ route }) => {
   const [commentsList, setCommentsList] = useState(route.params.comments);
@@ -29,9 +43,9 @@ const Comments = ({ route }) => {
 
   const onPublish = () => {
     const date = new Date().toDateString();
-    const list = [...commentsList, { comment, date, userAvatar }]
+    const list = [...commentsList, { comment, date, userAvatar }];
     setCommentsList(list);
-    dispatch(updatePost({ id, comments:list }));
+    dispatch(updatePost({ id, comments: list }));
     setComment("");
   };
   return (
@@ -48,16 +62,7 @@ const Comments = ({ route }) => {
         <FlatList
           data={commentsList}
           keyExtractor={(item, ind) => ind.toString()}
-          renderItem={({ item }) => (
-            <>
-              <Image
-                source={{ uri: `${item.userAvatar}` }}
-                style={{ width: 20, height: 20 }}
-              />
-              <Text>{item.comment}</Text>
-              <Text>{item.date}</Text>
-            </>
-          )}
+          renderItem={({ item }) => <OneComment item={item} />}
         />
       )}
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

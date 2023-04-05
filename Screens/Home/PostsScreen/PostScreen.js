@@ -17,13 +17,19 @@ const Posts = ({ navigation }) => {
   const name = useSelector(getName);
   const avatar = useSelector(getAvatar);
   const email = useSelector(getEmail);
-  const changed = useSelector(isChanged)
+  const changed = useSelector(isChanged);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(changed){dispatch(getAllPosts());}
+    if (changed) {
+      dispatch(getAllPosts());
+    }
   }, [changed]);
+
+  useEffect(() => {
+    dispatch(getAllPosts());
+  }, []);
 
   return (
     <ContainerAll>
