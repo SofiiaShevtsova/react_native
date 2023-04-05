@@ -4,7 +4,6 @@ import {
   logInUser,
   logOutUser,
   getCurrentUser,
-  // changeAvatar,
 } from "./authOperation";
 
 const initialState = {
@@ -34,10 +33,10 @@ export const authSlice = createSlice({
       .addCase(registerNewUser.pending, (state) => {
         statusProgress(state);
       })
-      .addCase(registerNewUser.fulfilled, (state, action) => {
+      .addCase(registerNewUser.fulfilled, (state, {payload}) => {
         state.isLoading = false;
         state.error = null;
-        state.userEmail = action.payload;
+        state.userEmail = payload.email;
         state.isLogin = true
       })
       .addCase(registerNewUser.rejected, (state, action) => {
@@ -78,7 +77,7 @@ export const authSlice = createSlice({
       .addCase(getCurrentUser.fulfilled, (state, { payload }) => {
         state.uid = payload.uid;
         state.avatar = payload.photo;
-        state.user = payload.name;
+        state.userName = payload.name;
         state.isLoading = false;
         state.error = null;
         state.userEmail = payload.email;
@@ -89,53 +88,6 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.token = null;
       });
-    // .addCase(changeAvatar.pending, state => {
-    //   statusProgress(state);
-    // })
-    // .addCase(changeAvatar.fulfilled, (state, action) => {
-    //   state.avatar = action.payload.avatarURL;
-    //   state.isLoading = false;
-    //   state.error = null;
-    // })
-    // .addCase(changeAvatar.rejected, (state, action) => {
-    //   statusError(state, action);
-    // })
-
-    // .addCase(getContacts.pending, state => {
-    //   statusProgress(state);
-    // })
-    // .addCase(getContacts.fulfilled, (state, action) => {
-    //   state.contacts = [...action.payload];
-    //   state.isLoading = false;
-    //   state.error = null;
-    // })
-    // .addCase(getContacts.rejected, (state, action) => {
-    //   statusError(state, action);
-    // })
-    // .addCase(addContact.pending, state => {
-    //   statusProgress(state);
-    // })
-    // .addCase(addContact.fulfilled, (state, action) => {
-    //   state.isLoading = false;
-    //   state.error = null;
-    //   state.contacts = [...state.contacts, action.payload];
-    // })
-    // .addCase(addContact.rejected, (state, action) => {
-    //   statusError(state, action);
-    // })
-    // .addCase(removeContact.pending, state => {
-    //   statusProgress(state);
-    // })
-    // .addCase(removeContact.fulfilled, (state, action) => {
-    //   state.contacts = state.contacts.filter(
-    //     elem => elem._id !== action.payload
-    //   );
-    //   state.isLoading = false;
-    //   state.error = null;
-    // })
-    // .addCase(removeContact.rejected, (state, action) => {
-    //   statusError(state, action);
-    // });
   },
 });
 

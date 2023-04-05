@@ -10,7 +10,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import { logInUser } from "../../../redux/authOperation";
+import { logInUser } from "../../../redux/Auth/authOperation";
 import ContainerAuth from "../../../Components/ContainerAuth";
 import styles from "../Style/styleAuthPages";
 

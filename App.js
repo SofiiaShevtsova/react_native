@@ -11,9 +11,8 @@ import Comments from "./Screens/Home/PostsScreen/CommentsScreen/CommentsScreen";
 import { store, persistor } from "./redux/reduxStore";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { getEmail, isUserLogin } from "./redux/authSelectors";
-import { useDispatch } from "react-redux";
 import { getCurrentUser } from "./redux/authOperation";
 
 const Stack = createNativeStackNavigator();

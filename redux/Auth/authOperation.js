@@ -4,21 +4,26 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  updateProfile,
 } from "firebase/auth";
-import { auth } from "../firebase/config";
+import { auth } from "../../firebase/config";
 
 export const registerNewUser = createAsyncThunk(
   "register/addUser",
   async (user, thunkAPI) => {
     try {
-      const { email, password } = user;
+      const { email, password, image = "", name } = user;
       const newUser = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
       if (newUser) {
-        return newUser.user.email;
+        updateProfile(auth.currentUser, {
+          displayName: name,
+          photoURL: image,
+        })
+        return email;
       }
     } catch (e) {
       return thunkAPI.rejectWithValue("Not register!");
@@ -76,64 +81,10 @@ export const getCurrentUser = createAsyncThunk(
         };
         return user;
       } else {
-        throw new Error
+        throw new Error();
       }
     } catch (e) {
       return thunkAPI.rejectWithValue("Not founded!");
     }
   }
 );
-
-// export const changeAvatar = createAsyncThunk(
-//   'avatars/change',
-//   async (avatar, thunkAPI) => {
-//     try {
-//       console.dir(avatar);
-//       const response = await axios.patch('/users/avatars', avatar, {
-//   headers: {
-//     "Content-Type": "multipart/form-data",
-//   },
-//       });
-//       console.log(response.data);
-//       return response.data;
-//     } catch (e) {
-//       return thunkAPI.rejectWithValue('Not register!');
-//     }
-//   }
-// );
-
-// export const getContacts = createAsyncThunk(
-//   'contacts/getContacts',
-//   async (_, thunkAPI) => {
-//     try {
-//       const response = await axios.get('/contacts');
-//       return response.data;
-//     } catch (e) {
-//       return thunkAPI.rejectWithValue('Not founded!');
-//     }
-//   }
-// );
-
-// export const addContact = createAsyncThunk(
-//   'contacts/addContacts',
-//   async (contact, thunkAPI) => {
-//     try {
-//       const response = await axios.post('/contacts', contact);
-//       return response.data;
-//     } catch (e) {
-//       return thunkAPI.rejectWithValue('Can not do it!');
-//     }
-//   }
-// );
-
-// export const removeContact = createAsyncThunk(
-//   'contacts/removeContacts',
-//   async (id, thunkAPI) => {
-//     try {
-//       await axios.delete(`/contacts/${id}`);
-//       return id
-//     } catch (e) {
-//       return thunkAPI.rejectWithValue('Can not do it!');
-//     }
-//   }
-// );

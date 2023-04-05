@@ -1,6 +1,6 @@
 import { Pressable } from "react-native";
 import { useDispatch } from "react-redux";
-import { logOutUser } from "../../redux/authOperation";
+import { logOutUser } from "../../redux/Auth/authOperation";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import CreatePosts from "./CreatePostsScreen/CreatePosts";
@@ -9,7 +9,7 @@ import PostsScreen from "./PostsScreen/PostScreen";
 
 const Tab = createBottomTabNavigator();
 
-const Home = ({ user }) => {
+const Home = () => {
   const dispatch = useDispatch();
 
   const logoutUser = () => {
