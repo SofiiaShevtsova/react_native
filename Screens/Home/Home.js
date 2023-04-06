@@ -68,7 +68,10 @@ const Home = ({ navigation }) => {
             display: "none",
           },
           headerLeft: () => (
-            <Pressable onPress={()=>navigation.navigate("Publications")} style={{ paddingRight: 20 }}>
+            <Pressable
+              onPress={() => navigation.navigate("Publications")}
+              style={{ paddingRight: 20 }}
+            >
               <MaterialCommunityIcons
                 name="arrow-left"
                 color="rgba(33, 33, 33, 0.8)"
@@ -86,6 +89,7 @@ const Home = ({ navigation }) => {
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="account" color={color} size={30} />
           ),
+          headerShown: false,
         }}
       />
     </Tab.Navigator>

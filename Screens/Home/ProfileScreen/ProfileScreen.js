@@ -1,23 +1,59 @@
-import ContainerAll from "../../../Components/ContainerAll";
-// import React, { useState } from "react";
+import ContainerAuth from "../../../Components/ContainerAuth";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { Text, View, Pressable, Image, FlatList } from "react-native";
+import OnePost from "../PostsScreen/Post/OnePost";
+import { useDispatch, useSelector } from "react-redux";
 import {
-  Text,
-  View,
-  TextInput,
-  Pressable,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Image,
-} from "react-native";
+  getAvatar,
+  getName,
+  getUserId,
+} from "../../../redux/Auth/authSelectors";
+import { getPosts } from "../../../redux/Posts/postsSelectors";
+import { logOutUser } from "../../../redux/Auth/authOperation";
+import styles from "./styleProfile";
 
+const Profile = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const postsAll = useSelector(getPosts);
+  const name = useSelector(getName);
+  const avatar = useSelector(getAvatar);
+  const id = useSelector(getUserId);
 
-const Profile = ({navigation}) => {
+  const logoutUser = () => {
+    dispatch(logOutUser());
+  };
+
+  const posts = postsAll.filter((it) => it.owner === id);
 
   return (
-    <ContainerAll>
-    </ContainerAll>
+    <ContainerAuth>
+      <View style={styles.profileContainer}>
+        {avatar !== "" && (
+          <Image
+            source={{ uri: `${avatar}` }}
+            style={{ ...styles.userImage, width: 120, height: 120 }}
+          />
+        )}
+        <Pressable onPress={logoutUser} style={styles.logoutBtn}>
+          <MaterialCommunityIcons
+            name="login"
+            color="rgba(33, 33, 33, 0.8)"
+            size={30}
+          />
+        </Pressable>
+
+        <Text style={styles.nameUser}>{name}</Text>
+        {posts.length > 0 && (
+          <FlatList
+            data={posts}
+            keyExtractor={(item, ind) => ind.toString()}
+            renderItem={({ item }) => (
+              <OnePost postOne={item} navigation={navigation} />
+            )}
+          />
+        )}
+      </View>
+    </ContainerAuth>
   );
 };
 
