@@ -28,7 +28,6 @@ export const getAllPosts = createAsyncThunk(
       querySnapshot.forEach((doc) => {
         posts.push({ ...doc.data(), id: doc.id });
       });
-console.log(posts);
       return posts;
     } catch (e) {
       return thunkAPI.rejectWithValue("Not founded!");

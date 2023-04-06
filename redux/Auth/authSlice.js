@@ -33,11 +33,12 @@ export const authSlice = createSlice({
       .addCase(registerNewUser.pending, (state) => {
         statusProgress(state);
       })
-      .addCase(registerNewUser.fulfilled, (state, {payload}) => {
+      .addCase(registerNewUser.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.error = null;
         state.userEmail = payload.email;
-        state.isLogin = true
+        state.avatar = payload.image;
+        state.userName = payload.name;
       })
       .addCase(registerNewUser.rejected, (state, action) => {
         statusError(state, action);
@@ -49,7 +50,7 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.error = null;
         state.userEmail = action.payload;
-        state.isLogin = true
+        state.isLogin = true;
       })
       .addCase(logInUser.rejected, (state, action) => {
         statusError(state, action);
@@ -65,8 +66,7 @@ export const authSlice = createSlice({
         state.userEmail = "";
         state.isLoading = false;
         state.error = null;
-        state.isLogin = false
-
+        state.isLogin = false;
       })
       .addCase(logOutUser.rejected, (state, action) => {
         statusError(state, action);
@@ -81,8 +81,7 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.error = null;
         state.userEmail = payload.email;
-        state.isLogin = true
-
+        state.isLogin = true;
       })
       .addCase(getCurrentUser.rejected, (state, action) => {
         state.isLoading = false;

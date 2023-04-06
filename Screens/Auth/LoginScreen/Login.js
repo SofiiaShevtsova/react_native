@@ -1,5 +1,5 @@
+import ContainerAuth from "../../../Components/ContainerAuth";
 import React, { useState } from "react";
-import { useDispatch } from 'react-redux';
 import {
   Text,
   View,
@@ -10,33 +10,44 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { useDispatch } from "react-redux";
 import { logInUser } from "../../../redux/Auth/authOperation";
-import ContainerAuth from "../../../Components/ContainerAuth";
 import styles from "../Style/styleAuthPages";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(true);
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
   const dispatch = useDispatch();
-  
+
   const emailHandler = (text) => setEmail(text);
   const passwordHandler = (text) => setPassword(text);
   const showPassword = () => setShowPass(!showPass);
 
   const SignIn = () => {
-    const user = {email, password}
+    const user = { email, password };
     dispatch(logInUser(user));
 
     setEmail("");
     setPassword("");
   };
 
+  const keyboardHide = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+  };
+
+  const handleFocus = () => {
+    setIsShowKeyboard(true);
+  };
+
+
   return (
     <ContainerAuth>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.containerLogin}>
+      <TouchableWithoutFeedback onPress={keyboardHide}>
+        <View style={{...styles.containerLogin, marginBottom: isShowKeyboard ? -230 : 0}}>
           <Text style={styles.title}>Log in</Text>
           <KeyboardAvoidingView
             behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -47,6 +58,7 @@ const Login = ({ navigation }) => {
               style={styles.input}
               value={email}
               onChangeText={emailHandler}
+                onFocus={handleFocus}
             />
             <View style={styles.containerPassword}>
               <TextInput
@@ -56,6 +68,7 @@ const Login = ({ navigation }) => {
                 value={password}
                 secureTextEntry={showPass}
                 onChangeText={passwordHandler}
+                onFocus={handleFocus}
               />
               <Pressable style={styles.passwordShow} onPress={showPassword}>
                 <Text style={styles.nameButton}>Show</Text>

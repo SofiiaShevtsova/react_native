@@ -1,8 +1,8 @@
 import { Pressable } from "react-native";
-import { useDispatch } from "react-redux";
-import { logOutUser } from "../../redux/Auth/authOperation";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { useDispatch } from "react-redux";
+import { logOutUser } from "../../redux/Auth/authOperation";
 import CreatePosts from "./CreatePostsScreen/CreatePosts";
 import Profile from "./ProfileScreen/ProfileScreen";
 import PostsScreen from "./PostsScreen/PostScreen";

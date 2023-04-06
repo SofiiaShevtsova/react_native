@@ -22,8 +22,8 @@ export const registerNewUser = createAsyncThunk(
         updateProfile(auth.currentUser, {
           displayName: name,
           photoURL: image,
-        })
-        return email;
+        });
+        return { email, name, image };
       }
     } catch (e) {
       return thunkAPI.rejectWithValue("Not register!");

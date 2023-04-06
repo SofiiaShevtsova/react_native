@@ -1,7 +1,6 @@
 import ContainerAuth from "../../../Components/ContainerAuth";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { Text, View, Pressable, Image, FlatList } from "react-native";
-import OnePost from "../PostsScreen/Post/OnePost";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAvatar,
@@ -10,14 +9,16 @@ import {
 } from "../../../redux/Auth/authSelectors";
 import { getPosts } from "../../../redux/Posts/postsSelectors";
 import { logOutUser } from "../../../redux/Auth/authOperation";
+import OnePost from "../PostsScreen/Post/OnePost";
 import styles from "./styleProfile";
 
 const Profile = ({ navigation }) => {
-  const dispatch = useDispatch();
   const postsAll = useSelector(getPosts);
   const name = useSelector(getName);
   const avatar = useSelector(getAvatar);
   const id = useSelector(getUserId);
+
+  const dispatch = useDispatch();
 
   const logoutUser = () => {
     dispatch(logOutUser());

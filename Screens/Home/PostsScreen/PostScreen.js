@@ -1,8 +1,6 @@
 import ContainerAll from "../../../Components/ContainerAll";
-import { Text, View, FlatList, Image } from "react-native";
-import styles from "./Post/stylePosts";
 import { useEffect } from "react";
-import OnePost from "./Post/OnePost";
+import { Text, View, FlatList, Image } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getEmail,
@@ -11,6 +9,8 @@ import {
 } from "../../../redux/Auth/authSelectors";
 import { getAllPosts } from "../../../redux/Posts/postsOperation";
 import { getPosts, isChanged } from "../../../redux/Posts/postsSelectors";
+import OnePost from "./Post/OnePost";
+import styles from "./Post/stylePosts";
 
 const Posts = ({ navigation }) => {
   const posts = useSelector(getPosts);

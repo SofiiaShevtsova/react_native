@@ -1,6 +1,6 @@
 import { View, Image, Pressable, Text } from "react-native";
-import styles from "./stylePosts";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import styles from "./stylePosts";
 
 const OnePost = ({ postOne, navigation }) => {
   const { image, place, location, name, comments, like, owner, date, id } =

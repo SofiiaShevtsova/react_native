@@ -1,4 +1,5 @@
 import ContainerAll from "../../../../Components/ContainerAll";
+import { useState } from "react";
 import {
   Text,
   View,
@@ -11,23 +12,36 @@ import {
   FlatList,
   Image,
 } from "react-native";
-import styles from "../Post/stylePosts";
-import stylesComment from "./styleComments";
-import { useState } from "react";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePost } from "../../../../redux/Posts/postsOperation";
 import { getAvatar } from "../../../../redux/Auth/authSelectors";
+import styles from "../Post/stylePosts";
+import stylesComment from "./styleComments";
 
-const OneComment = ({item}) => {
+
+const OneComment = ({ item, user }) => {
+const styleImage =
+    (user === item.userAvatar) ? stylesComment.userImageUser : stylesComment.userImage;
+  
   return (
-    <View style={stylesComment.commentContainer}>
-        <Image
-          source={{ uri: `${item.userAvatar}` }}
-          style={{ ...stylesComment.userImage, width: 30, height: 30 }}
-        />
+    <View
+      style={
+        user === item.userAvatar
+          ? stylesComment.commentContainerUser
+          : stylesComment.commentContainer
+      }
+    >
+      <Image
+        source={{ uri: `${item.userAvatar}` }}
+        style={{
+          ...styleImage,
+          width: 30,
+          height: 30,
+        }}
+      />
       <Text style={stylesComment.commentText}>{item.comment}</Text>
-      <Text style={stylesComment.commentDate}>{item.date}</Text>
+      <Text style={user === item.userAvatar? stylesComment.commentDate: stylesComment.commentDateUser}>{item.date}</Text>
     </View>
   );
 };
@@ -48,6 +62,7 @@ const Comments = ({ route }) => {
     dispatch(updatePost({ id, comments: list }));
     setComment("");
   };
+
   return (
     <ContainerAll>
       <View style={styles.postImage}>
@@ -62,7 +77,9 @@ const Comments = ({ route }) => {
         <FlatList
           data={commentsList}
           keyExtractor={(item, ind) => ind.toString()}
-          renderItem={({ item }) => <OneComment item={item} />}
+          renderItem={({ item }) => (
+            <OneComment item={item} user={userAvatar} />
+          )}
         />
       )}
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

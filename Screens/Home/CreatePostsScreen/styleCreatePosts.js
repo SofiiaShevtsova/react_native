@@ -47,11 +47,11 @@ const styles = StyleSheet.create({
     display: "flex",
     position: "absolute",
     bottom: 10,
-    left:'35%',
+    left: "35%",
     justifyContent: "center",
     alignItems: "center",
     width: "30%",
-    paddingVertical:5,
+    paddingVertical: 5,
   },
   camera: {
     width: "100%",
