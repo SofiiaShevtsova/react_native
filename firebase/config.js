@@ -4,8 +4,10 @@ import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import {getFirestore} from "firebase/firestore"
 
+const apiKey = process.env.REACT_APP_API_KEY;
+
   const firebaseConfig = {
-    apiKey: "AIzaSyBK9KwZF9xa31zsUjzSO5INFVVtNsVduBQ",
+    apiKey: apiKey,
     authDomain: "sova-react-native.firebaseapp.com",
     projectId: "sova-react-native",
     storageBucket: "sova-react-native.appspot.com",
